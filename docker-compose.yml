@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: db
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=angular_node
+      - MYSQL_ROOT_PASSWORD=toor123
+    ports:
+      - '3307:3306'
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  api:
+    container_name: api
+    build: ./node-back
+    image: node-api
+    restart: always
+    ports:
+      - 3100:3100
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: toor123
+      DB_NAME: angular_node
+    links:
+      - db
+    volumes:
+      - ./node-back:/usr/src/app/node-back
+      - /usr/src/app/node-back/node_modules
+  front:
+    container_name: front
+    restart: always
+    build: ./angular-front
+    image: front-angular
+    links:
+      - api
+    ports:
+      - 4201:4201
+    environment:
+      API_URL: http://localhost:3100
+    volumes:
+      - ./angular-front:/usr/src/app/angular-front
+      - /usr/src/app/angular-front/node_modules
+volumes:
+  db:
+    driver: local
