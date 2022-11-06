@@ -38,31 +38,46 @@
   </div>
   <div class="col mat-elevation-z2">
     <div class="form">
-      <input matInput [value]="user.id" hidden>
+      <input matInput [value]="selectedRowIndex" hidden>
       <mat-form-field appearance="fill">
         <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre" [(ngModel)]="user.name">
+        <input matInput placeholder="Nombre" [formControl]="user.name" required>
+        <mat-error *ngIf="user.name.invalid">{{validateField('name')}}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Apellido</mat-label>
-        <input matInput placeholder="Apellido" [(ngModel)]="user.lastname">
+        <input matInput placeholder="Apellido" [formControl]="user.lastname" required>
+        <mat-error *ngIf="user.lastname.invalid">{{validateField('lastname')}}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Edad</mat-label>
-        <input matInput type="number" placeholder="Edad" [(ngModel)]="user.age">
+        <input matInput type="number" placeholder="Edad" [formControl]="user.age" required>
+        <mat-error *ngIf="user.age.invalid">{{validateField('age')}}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Correo</mat-label>
-        <input matInput placeholder="Correo" [(ngModel)]="user.email">
+        <input matInput placeholder="Correo" [formControl]="user.email" required>
+        <mat-error *ngIf="user.email.invalid">{{validateField('email')}}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Telefono</mat-label>
-        <input matInput type="number" placeholder="Telefono" [(ngModel)]="user.phone">
+        <input matInput type="number" placeholder="Telefono" [formControl]="user.phone" required>
+        <mat-error *ngIf="user.phone.invalid">{{validateField('phone')}}</mat-error>
       </mat-form-field>
       <div class="buttons">
-        <button mat-raised-button color="primary" (click)="saveUser()">Guardar</button>
-        <button mat-raised-button color="warn" (click)="deleteUser()">Eliminar</button>
+        <button mat-raised-button color="primary" (click)="saveUser()" [disabled]="!newUser">Crear</button>
+        <button mat-raised-button color="primary" (click)="updateUser()" [disabled]="newUser">Guardar</button>
+        <button mat-raised-button color="warn" (click)="deleteUser()" [disabled]="newUser">Eliminar</button>
+        <button mat-raised-button color="accent" (click)="cancelAction()">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
+
+<swal
+  #infoSwal
+  title="Datos Invalidos"
+  text="Campos incompletos o invalidos."
+  icon="warning"
+  [showCancelButton]="false">
+</swal>

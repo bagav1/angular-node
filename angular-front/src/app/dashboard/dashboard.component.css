@@ -51,7 +51,7 @@ mat-form-field {
 .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 50%;
+  justify-content: space-around;
+  width: 75%;
   margin: auto;
 }
